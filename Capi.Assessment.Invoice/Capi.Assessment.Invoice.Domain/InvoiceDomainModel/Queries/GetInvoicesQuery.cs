@@ -2,6 +2,7 @@
 using XFrame.Aggregates.Queries;
 using XFrame.Common.Extensions;
 using XFrame.Persistence;
+using XFrame.Persistence.EFCore.Extensions;
 using XFrame.Persistence.EFCore.Queries.CriteriaQueries;
 using XFrame.Persistence.EFCore.Queries.Filtering;
 using XFrame.Persistence.Extensions;
@@ -25,12 +26,9 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Queries
 
         protected override void OnBuildDomainCriteria(EFCoreDomainCriteria domainCriteria)
         {
-            if(Status.HasItems() && TodaysDate != default)
-            {
-                domainCriteria.SafeAnd(new AndFilter(
-                    new EqualityFilter("Status", Status, FilterType.NotIn),
-                    new EqualityFilter("DueDate", TodaysDate, FilterType.LessThan)));
-            }
+            domainCriteria.BuildCriteria(criteria => criteria
+            .When(Status.Any(), x => x.NotIn(nameof(Invoice.Status), Status))
+            .When(TodaysDate != default, x => x.LessThan(nameof(Invoice.DueDate), TodaysDate)));
         }
 
         #endregion
