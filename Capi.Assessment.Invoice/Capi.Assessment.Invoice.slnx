@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Capi.Assessment.Invoice.Api/Capi.Assessment.Invoice.Api.csproj" />
+  <Project Path="Capi.Assessment.Invoice.Api.Tests/Capi.Assessment.Invoice.Api.Tests.csproj" />
+  <Project Path="Capi.Assessment.Invoice.Domain/Capi.Assessment.Invoice.Domain.csproj" />
+  <Project Path="Capi.Assessment.Invoice.Persistence/Capi.Assessment.Invoice.Persistence.csproj" />
+</Solution>
