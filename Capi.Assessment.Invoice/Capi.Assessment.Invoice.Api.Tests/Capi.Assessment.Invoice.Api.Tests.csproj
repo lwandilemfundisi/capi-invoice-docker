@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Capi.Assessment.Invoice.Api\Capi.Assessment.Invoice.Api.csproj" />
+    <ProjectReference Include="..\Capi.Assessment.Invoice.Domain\Capi.Assessment.Invoice.Domain.csproj" />
   </ItemGroup>
 </Project>
