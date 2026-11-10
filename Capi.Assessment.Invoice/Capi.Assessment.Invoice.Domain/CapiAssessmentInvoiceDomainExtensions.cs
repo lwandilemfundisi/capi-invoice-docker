@@ -5,6 +5,7 @@ using XFrame.Aggregates.EventMetadata.Extentions;
 using XFrame.Aggregates.Events.Extensions;
 using XFrame.Aggregates.Queries.Extensions;
 using XFrame.DomainContainers;
+using XFrame.Rules.Extensions;
 
 namespace Capi.Assessment.Invoice.Domain
 {
@@ -21,7 +22,8 @@ namespace Capi.Assessment.Invoice.Domain
                 .AddCommandHandlers(Assembly, null)
                 .AddQueries(Assembly, null)
                 .AddQueryHandlers(Assembly, null)
-                .AddMetadataProviders(Assembly, null);
+                .AddMetadataProviders(Assembly, null)
+                .AddRules(Assembly, null);
         }
     }
 }

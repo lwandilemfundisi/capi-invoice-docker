@@ -7,6 +7,7 @@ using XFrame.Aggregates.Events.Serializers;
 using XFrame.Aggregates.Queries;
 using XFrame.AggregateStores;
 using XFrame.Jobs;
+using XFrame.Rules;
 
 namespace Capi.Assessment.Invoice.Api.Extensions
 {
@@ -27,6 +28,7 @@ namespace Capi.Assessment.Invoice.Api.Extensions
             services.TryAddTransient<IDomainEventPublisher, DomainEventPublisher>();
             services.TryAddTransient<IDispatchToEventSubscribers, DispatchToEventSubscribers>();
             services.TryAddSingleton<IDomainEventFactory, DomainEventFactory>();
+            services.TryAddSingleton<IValidator, Validator>();
         }
     }
 }

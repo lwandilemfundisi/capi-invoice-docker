@@ -1,5 +1,11 @@
-﻿using XFrame.Aggregates.Commands;
+﻿using Capi.Assessment.Invoice.Domain.Extensions;
+using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Rules;
+using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Rules.Contexts;
+using XFrame.Aggregates.Commands;
 using XFrame.Aggregates.ExecutionResults;
+using XFrame.Common;
+using XFrame.Notifications.Extensions;
+using XFrame.Rules;
 
 namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Commands
 {
@@ -52,15 +58,22 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Commands
 
     #region Command Handler
 
-    public class CreateInvoiceCommandHandler : CommandHandler<Invoice, InvoiceId, CreateInvoiceCommand>
+    public class CreateInvoiceCommandHandler(IValidator validator) : CommandHandler<Invoice, InvoiceId, CreateInvoiceCommand>
     {
         #region Methods
 
-        public override Task<IExecutionResult> ExecuteAsync(
+        public async override Task<IExecutionResult> ExecuteAsync(
             Invoice aggregate, 
             CreateInvoiceCommand command, 
             CancellationToken cancellationToken)
         {
+            var notifications = await validator.ValidateAsync<CreateInvoiceCommand, InvoiceValidationContext>(command, cancellationToken);
+
+            if (notifications.HasErrors())
+            {
+                return ExecutionResult.Failed(notifications);
+            }
+
             aggregate.CreateInvoice(
                 command.Client,
                 command.Email,
@@ -71,7 +84,7 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Commands
                 command.Status,
                 command.Description);
 
-            return Task.FromResult(ExecutionResult.Success(aggregate));
+            return ExecutionResult.Success(aggregate);
         }
 
         #endregion
