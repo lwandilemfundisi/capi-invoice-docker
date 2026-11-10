@@ -6,26 +6,17 @@ using InvoiceId = Capi.Assessment.Invoice.Domain.InvoiceDomainModel.InvoiceId;
 using XFrame.Aggregates.Commands;
 using XFrame.Aggregates.Queries;
 using XFrame.Aggregates.ExecutionResults;
+using Capi.Assessment.Invoice.Domain.Applications.Models;
 
 namespace Capi.Assessment.Invoice.Domain.Applications;
 
 public class CapiInvoiceApplication(ICommandBus commandBus, IQueryProcessor queryProcessor) : ICapiInvoiceApplication
 {
     public Task<IExecutionResult> CreateInvoiceAsync(
-        CreateInvoiceApplicationRequest request,
+        string client, string email, decimal amount, string currency, DateTime issuedDate, DateTime dueDate, string description,
         CancellationToken cancellationToken)
     {
-        var command = new CreateInvoiceCommand(
-            InvoiceId.New,
-            request.Client,
-            request.Email,
-            request.Amount,
-            request.Currency,
-            request.IssuedDate,
-            request.DueDate,
-            request.DueDate < DateTime.Today ? "overdue" : "sent",
-            request.Description);
-
+        var command = new CreateInvoiceCommand(InvoiceId.New, client, email, amount, currency, issuedDate, dueDate, dueDate < DateTime.Today ? "overdue" : "sent", description);
         return commandBus.PublishAsync(command, cancellationToken);
     }
 

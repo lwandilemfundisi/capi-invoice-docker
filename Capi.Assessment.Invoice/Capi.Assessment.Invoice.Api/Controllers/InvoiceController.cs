@@ -1,9 +1,13 @@
+using Azure;
 using Capi.Assessment.Invoice.Api.Extensions;
 using Capi.Assessment.Invoice.Api.Mappers.Abstract;
 using Capi.Assessment.Invoice.Api.Models.RequestModels;
 using Capi.Assessment.Invoice.Api.Models.ResponseModels;
+using Capi.Assessment.Invoice.Api.Models.ResponseModels.Abstract;
 using Capi.Assessment.Invoice.Domain.Applications;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using XFrame.Aggregates.ExecutionResults;
 
 namespace Capi.Assessment.Invoice.Api.Controllers;
 
@@ -14,21 +18,21 @@ public class InvoiceController(
     IMappingRegistry mappingRegistry) : ControllerBase
 {
     [HttpPost("create")]
-    public async Task<ActionResult<CreateInvoiceResponseModel>> CreateInvoice(
+    public async Task<CreateInvoiceResponseModel> CreateInvoice(
         CreateInvoiceRequestModel model,
         CancellationToken cancellationToken)
     {
-        var result = await invoiceApplication.CreateInvoiceAsync(new CreateInvoiceApplicationRequest(
+        var result = await invoiceApplication.CreateInvoiceAsync(
             model.Client,
             model.Email,
             model.Amount,
             model.Currency,
             model.IssuedDate,
             model.DueDate,
-            model.Description), cancellationToken);
+            model.Description, 
+            cancellationToken);
 
-        var response = mappingRegistry.Map<CreateInvoiceResponseModel>(result.GetResult<Domain.InvoiceDomainModel.Invoice>());
-        return result.IsSuccess ? Ok(response) : UnprocessableEntity(response);
+        return GetResponse<Domain.InvoiceDomainModel.Invoice, CreateInvoiceResponseModel>(result);
     }
 
     [HttpGet("list")]
@@ -41,12 +45,12 @@ public class InvoiceController(
     }
 
     [HttpPatch("{id}/paid")]
-    public async Task<ActionResult<UpdateInvoiceStatusPaidResponseModel>> UpdateInvoiceStatus(
+    public async Task<UpdateInvoiceStatusPaidResponseModel> UpdateInvoiceStatus(
         [FromRoute] string id,
         CancellationToken cancellationToken)
     {
         var result = await invoiceApplication.MarkInvoicePaidAsync(id, cancellationToken);
-        return result.IsSuccess ? Ok(result) : UnprocessableEntity(result);
+        return GetResponse<UpdateInvoiceStatusPaidResponseModel>(result);
     }
 
     [HttpGet("reminders")]
@@ -74,5 +78,29 @@ public class InvoiceController(
             OverdueCount = result.CheckedCount,
             Message = result.Message
         });
+    }
+
+    private TResponse GetResponse<TDomain, TResponse>(IExecutionResult result)
+        where TResponse : ResponseModel
+    {
+        var response = mappingRegistry.Map<TResponse>(result.GetResult<TDomain>());
+
+        if (!result.IsSuccess)
+            response.Notification = result.GetErrors();
+
+        return response;
+    }
+
+    private TResponse GetResponse<TResponse>(IExecutionResult result)
+        where TResponse : ResponseModel, new()
+    {
+        var response = new TResponse();
+
+        if(!result.IsSuccess)
+        {
+            response.Notification = result.GetErrors();
+        }
+
+        return response;
     }
 }
