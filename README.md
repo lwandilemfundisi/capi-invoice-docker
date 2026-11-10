@@ -10,9 +10,11 @@ Capi Invoices is a small invoice tracking app with a browser interface, a .NET A
 - **Payments view:** focus on paid invoices.
 - **Create invoice:** enter the client, email, amount, issue date, due date, and description. The app uses South African rand (ZAR). It sets a new invoice to `sent`, or `overdue` when its due date is already in the past.
 - **Mark paid:** use the action at the end of an unpaid invoice row to change its status to paid.
-- **Activity and reminders:** view reminder activity and manually simulate overdue reminder processing. This is a demonstration; the app does not send real email.
+- **Activity and reminders:** view reminder activity. The manual reminder simulator is a test endpoint for demonstration purposes; the app does not send real email.
 
 The Activity screen describes a reminder sequence starting three days overdue and repeating every seven days. In the checked API source, the simulator currently checks that an invoice is at least three days overdue and has not had a reminder logged today; it does not enforce the seven-day interval. The button is manual, so no background reminder job runs on a schedule.
+
+`POST /api/invoice/reminders/simulate` is a **test endpoint**. It manually exercises overdue invoice processing and records simulated reminders; it does not send emails or run as a scheduled production notification service.
 
 ## Run with Docker
 
@@ -48,7 +50,7 @@ The compose file uses a development-only default SQL Server password. To change 
 | `GET` | `/api/invoice/list` | List invoices |
 | `PATCH` | `/api/invoice/{id}/paid` | Mark an invoice paid |
 | `GET` | `/api/invoice/reminders` | Read reminder activity |
-| `POST` | `/api/invoice/reminders/simulate` | Manually simulate reminder processing |
+| `POST` | `/api/invoice/reminders/simulate` | Test endpoint: manually simulate reminder processing |
 
 ## Project folders
 
