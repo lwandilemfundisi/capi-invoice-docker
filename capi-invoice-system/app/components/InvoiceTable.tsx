@@ -70,9 +70,6 @@ export function InvoiceTable({
             ☷ <span>Filter</span>
             <span className="filter-down">⌄</span>
           </button>
-          <button className="more-button" aria-label="More">
-            ···
-          </button>
         </div>
       </div>
 
@@ -94,7 +91,7 @@ export function InvoiceTable({
           <thead>
             <tr>
               <th>
-                <input type="checkbox" aria-label="Select all" />
+                
               </th>
               <th>INVOICE</th>
               <th>CLIENT</th>
@@ -122,10 +119,7 @@ export function InvoiceTable({
               filtered.map((invoice, index) => (
                 <tr key={invoice.id}>
                   <td>
-                    <input
-                      type="checkbox"
-                      aria-label={`Select ${invoice.id}`}
-                    />
+                    
                   </td>
                   <td>
                     <a className="invoice-id">{invoice.id}</a>
@@ -186,15 +180,7 @@ export function InvoiceTable({
       </div>
 
       <div className="table-footer">
-        <span>
-          Showing <strong>{filtered.length ? 1 : 0}–{filtered.length}</strong>{" "}
-          of <strong>{filtered.length}</strong> invoices
-        </span>
-        <div>
-          <button disabled>←</button>
-          <button className="current-page">1</button>
-          <button disabled>→</button>
-        </div>
+        
       </div>
     </section>
   );

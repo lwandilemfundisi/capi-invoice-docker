@@ -23,7 +23,8 @@ namespace Capi.Assessment.Invoice.Api.Mappers
                     PaidAt = invoice.PaidAt
                 };
             }
-            return null;
+
+            return new CreateInvoiceModel();
         }
     }
 }

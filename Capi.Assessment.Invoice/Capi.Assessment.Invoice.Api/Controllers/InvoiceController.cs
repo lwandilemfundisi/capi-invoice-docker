@@ -1,11 +1,9 @@
-using Azure;
 using Capi.Assessment.Invoice.Api.Extensions;
 using Capi.Assessment.Invoice.Api.Mappers.Abstract;
 using Capi.Assessment.Invoice.Api.Models.RequestModels;
 using Capi.Assessment.Invoice.Api.Models.ResponseModels;
 using Capi.Assessment.Invoice.Api.Models.ResponseModels.Abstract;
 using Capi.Assessment.Invoice.Domain.Applications;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using XFrame.Aggregates.ExecutionResults;
 
@@ -80,13 +78,20 @@ public class InvoiceController(
         });
     }
 
+    //Added these methods to avoid a big change, otherwise with more time I would refactor this controller properly
     private TResponse GetResponse<TDomain, TResponse>(IExecutionResult result)
-        where TResponse : ResponseModel
+        where TResponse : ResponseModel, new()
     {
         var response = mappingRegistry.Map<TResponse>(result.GetResult<TDomain>());
 
         if (!result.IsSuccess)
-            response.Notification = result.GetErrors();
+        {
+            response = new TResponse
+            {
+                Notification = result.GetErrors()
+            };
+        }
+            
 
         return response;
     }

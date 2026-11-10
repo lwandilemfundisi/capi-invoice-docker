@@ -1017,11 +1017,28 @@ footer span b {
     display:flex;
     align-items:center;
     gap:10px;
-    max-width:430px
+    max-width:430px;
+    max-height:min(50vh,320px);
+    overflow-y:auto
 }
 
 .toast>span {
     color:#68ca98
+}
+
+.toast[role="alert"] {
+    align-items:flex-start
+}
+
+.toast[role="alert"]>span {
+    color:#ff9a8f
+}
+
+.toast-messages {
+    display:grid;
+    gap:4px;
+    margin:0;
+    padding-left:16px
 }
 
 .toast button {

@@ -25,7 +25,7 @@ export default function CapiClient({ view }: { view: View }) {
   const [tab, setTab] = useState(page.tab);
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(false);
-  const [toast, setToast] = useState("");
+  const [toast, setToast] = useState<string | string[]>("");
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<InvoiceForm>(emptyForm);
 
@@ -93,6 +93,20 @@ export default function CapiClient({ view }: { view: View }) {
         }),
       });
       const data = await response.json();
+
+      const notificationMessages = Array.isArray(data.notification)
+        ? data.notification
+            .map((item: { text?: unknown }) =>
+              typeof item?.text === "string" ? item.text : "",
+            )
+            .filter((text: string) => text.trim().length > 0)
+        : [];
+
+        console.log(notificationMessages);
+      if (notificationMessages.length > 0) {
+        setToast(notificationMessages);
+        return;
+      }
 
       if (!response.ok) throw new Error(data.message);
 
@@ -188,10 +202,18 @@ export default function CapiClient({ view }: { view: View }) {
       </section>
 
       {toast && (
-        <div className="toast">
-          <span>✓</span>
-          {toast}
-          <button onClick={() => setToast("")}>×</button>
+        <div className="toast" role={Array.isArray(toast) ? "alert" : "status"}>
+          <span aria-hidden="true">{Array.isArray(toast) ? "!" : "✓"}</span>
+          {Array.isArray(toast) ? (
+            <ul className="toast-messages">
+              {toast.map((message, index) => (
+                <li key={`${index}-${message}`}>{message}</li>
+              ))}
+            </ul>
+          ) : (
+            <span className="toast-message">{toast}</span>
+          )}
+          <button aria-label="Dismiss notification" onClick={() => setToast("")}>×</button>
         </div>
       )}
 
