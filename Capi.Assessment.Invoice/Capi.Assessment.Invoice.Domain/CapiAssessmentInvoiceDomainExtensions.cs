@@ -16,6 +16,8 @@ namespace Capi.Assessment.Invoice.Domain
         public static IDomainContainer ConfigureCapiAssessmentInvoiceDomain(
             this IServiceCollection services)
         {
+            
+
             return DomainContainer.New(services)
                 .AddEvents(Assembly, null)
                 .AddCommands(Assembly, null)

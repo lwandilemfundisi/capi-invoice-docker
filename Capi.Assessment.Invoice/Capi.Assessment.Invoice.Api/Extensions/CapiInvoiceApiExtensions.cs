@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Capi.Assessment.Invoice.Domain.Applications;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using XFrame.AggregateEventPublisher;
 using XFrame.Aggregates;
 using XFrame.Aggregates.Commands;
@@ -8,6 +9,7 @@ using XFrame.Aggregates.Queries;
 using XFrame.AggregateStores;
 using XFrame.Jobs;
 using XFrame.Rules;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Capi.Assessment.Invoice.Api.Extensions
 {
@@ -29,6 +31,7 @@ namespace Capi.Assessment.Invoice.Api.Extensions
             services.TryAddTransient<IDispatchToEventSubscribers, DispatchToEventSubscribers>();
             services.TryAddSingleton<IDomainEventFactory, DomainEventFactory>();
             services.TryAddSingleton<IValidator, Validator>();
+            services.AddTransient<ICapiInvoiceApplication, CapiInvoiceApplication>();
         }
     }
 }
