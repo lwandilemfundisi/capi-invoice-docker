@@ -69,7 +69,6 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
         {
             AggregateSpecifications
                 .AggregateIsNew
-                .And(new CreateInvoiceSpecification())
                 .ThrowDomainErrorIfNotSatisfied(this);
 
             Client = client;
