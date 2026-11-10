@@ -1,8 +1,10 @@
 ﻿using Capi.Assessment.Invoice.Domain.Extensions;
 using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Entities;
 using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Events;
+using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Specifications;
 using XFrame.Aggregates;
 using XFrame.Common.Extensions;
+using XFrame.Specifications.Extensions;
 
 namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
 {
@@ -65,6 +67,11 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
             string status, 
             string description)
         {
+            AggregateSpecifications
+                .AggregateIsNew
+                .And(new CreateInvoiceSpecification())
+                .ThrowDomainErrorIfNotSatisfied(this);
+
             Client = client;
             Email = email;
             Amount = amount;
@@ -89,6 +96,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
             string status, 
             DateTimeOffset paidAt)
         {
+            AggregateSpecifications.AggregateIsCreated.ThrowDomainErrorIfNotSatisfied(this);
+
             Status = status;
             PaidAt = paidAt;
 
@@ -103,6 +112,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
             DateTimeOffset sentAt, 
             string type)
         {
+            AggregateSpecifications.AggregateIsCreated.ThrowDomainErrorIfNotSatisfied(this);
+
             var reminder = new Reminder
             {
                 Id = ReminderId.New,
@@ -121,8 +132,10 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
                 type));
         }
 
-        internal void UpdateStatusOverdue(string status)
+        public void UpdateStatusOverdue(string status)
         {
+            AggregateSpecifications.AggregateIsCreated.ThrowDomainErrorIfNotSatisfied(this);
+
             Status = status;
             Emit(new UpdatedInvoiceStatusOverdueEvent(status));
         }
