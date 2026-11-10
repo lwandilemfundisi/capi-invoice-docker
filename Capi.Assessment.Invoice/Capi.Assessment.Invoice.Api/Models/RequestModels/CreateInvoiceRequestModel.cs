@@ -12,8 +12,8 @@ namespace Capi.Assessment.Invoice.Api.Models.RequestModels
 
         public string Currency { get; set; }
 
-        public DateOnly IssuedDate { get; set; }
-        public DateOnly DueDate { get; set; }
+        public DateTime IssuedDate { get; set; }
+        public DateTime DueDate { get; set; }
 
         public string Status { get; set; }
 

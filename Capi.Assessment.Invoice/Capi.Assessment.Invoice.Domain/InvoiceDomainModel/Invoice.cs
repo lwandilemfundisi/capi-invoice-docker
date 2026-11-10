@@ -47,8 +47,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
         public string Email { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
-        public DateOnly IssuedDate { get; set; }
-        public DateOnly DueDate { get; set; }
+        public DateTime IssuedDate { get; set; }
+        public DateTime DueDate { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
         public DateTimeOffset? PaidAt { get; set; }
@@ -62,8 +62,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel
             string email, 
             decimal amount, 
             string currency, 
-            DateOnly issuedDate, 
-            DateOnly dueDate, 
+            DateTime issuedDate, 
+            DateTime dueDate, 
             string status, 
             string description)
         {

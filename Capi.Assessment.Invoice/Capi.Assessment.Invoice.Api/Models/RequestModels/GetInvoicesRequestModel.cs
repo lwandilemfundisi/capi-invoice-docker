@@ -6,7 +6,7 @@
 
         public string Status { get; set; }
 
-        public DateOnly TodaysDate { get; set; }
+        public DateTime TodaysDate { get; set; }
 
         #endregion 
     }

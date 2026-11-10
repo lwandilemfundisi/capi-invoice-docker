@@ -1,5 +1,6 @@
 ﻿using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Commands;
 using Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Rules.Contexts;
+using XFrame.Common.Extensions;
 using XFrame.Notifications;
 using XFrame.Rules.Validations;
 using XFrame.Rules.Validations.Attributes;
@@ -67,6 +68,22 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Rules
         {
             return DateTime.Today;
         }
+
+        protected override Task<Notification> OnValidate(CancellationToken cancellationToken)
+        {
+            Notification notification = Notification.CreateEmpty();
+            DateTime? dateTime = PropertyValue as DateTime?;
+            if (dateTime.IsNotNull())
+            {
+                DateTime value = OnGetMinimum();
+                if (dateTime > OnGetMaximum() || dateTime < value)
+                {
+                    notification.AddMessage(OnCreateMessage());
+                }
+            }
+
+            return Task.FromResult(notification);
+        }
     }
 
 
@@ -100,7 +117,7 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Rules
         {
             var notification = Notification.CreateEmpty();
 
-            if ((DateOnly)PropertyValue < Instance.IssuedDate)
+            if ((DateTime)PropertyValue < Instance.IssuedDate)
             {
                 notification.AddError(new Message("Due date cannot be less than issued date."));
             }

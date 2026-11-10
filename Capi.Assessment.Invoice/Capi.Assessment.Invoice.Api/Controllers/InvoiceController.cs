@@ -32,7 +32,7 @@ public class InvoiceController(
             model.Currency,
             model.IssuedDate,
             model.DueDate,
-            model.DueDate < DateOnly.FromDateTime(DateTime.Today)
+            model.DueDate < DateTime.Today
                 ? "overdue"
                 : "sent",
             model.Description);
@@ -86,7 +86,7 @@ public class InvoiceController(
     public async Task<ActionResult<SimulateReminderResponseModel>> SimulateReminder(
         CancellationToken cancellationToken)
     {
-        var today = DateOnly.FromDateTime(DateTime.Today);
+        var today = DateTime.Today;
         var invoicesQuery = new GetInvoicesQuery(["paid"], today);
         var invoicesResult = await queryProcessor.ProcessAsync(invoicesQuery, cancellationToken);
         var invoiceResponse = mappingRegistry.Map<GetInvoicesResponseModel>(invoicesResult);
@@ -106,10 +106,10 @@ public class InvoiceController(
 
         foreach (var invoice in overdueInvoices)
         {
-            var daysOverdue = today.DayNumber - invoice.DueDate.DayNumber;
+            var daysOverdue = today.Day - invoice.DueDate.Day;
             var reminderAlreadySentToday = notifications?.Any(notification =>
                 notification.InvoiceId == invoice.Id
-                && DateOnly.FromDateTime(notification.SentAt.LocalDateTime) == today) ?? false;
+                && notification.SentAt.LocalDateTime == today) ?? false;
 
             var overdueCmd = new UpdateInvoiceStatusOverdueCommand(new InvoiceId(invoice.Id));
             var overdueCmdResult = await commandBus.PublishAsync(overdueCmd, cancellationToken);

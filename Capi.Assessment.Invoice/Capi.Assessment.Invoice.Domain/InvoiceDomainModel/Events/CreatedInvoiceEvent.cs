@@ -7,8 +7,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Events
         string email, 
         decimal amount, 
         string currency, 
-        DateOnly issuedDate, 
-        DateOnly dueDate, 
+        DateTime issuedDate, 
+        DateTime dueDate, 
         string status, 
         string description)
         : AggregateEvent<Invoice, InvoiceId>
@@ -19,8 +19,8 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Events
         public string Email { get; } = email;
         public decimal Amount { get; } = amount;
         public string Currency { get; } = currency;
-        public DateOnly IssuedDate { get; } = issuedDate;
-        public DateOnly DueDate { get; } = dueDate;
+        public DateTime IssuedDate { get; } = issuedDate;
+        public DateTime DueDate { get; } = dueDate;
         public string Status { get; } = status;
         public string Description { get; } = description;
 

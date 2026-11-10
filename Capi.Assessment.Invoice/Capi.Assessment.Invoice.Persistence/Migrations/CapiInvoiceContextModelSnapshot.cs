@@ -66,14 +66,14 @@ namespace Capi.Assessment.Invoice.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DueDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("IssuedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("IssuedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTimeOffset?>("PaidAt")
                         .HasColumnType("datetimeoffset");

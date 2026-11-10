@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Capi.Assessment.Invoice.Persistence.Migrations
 {
     [DbContext(typeof(CapiInvoiceContext))]
-    [Migration("20261109145747_InitialMigration")]
+    [Migration("20261110142239_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -69,14 +69,14 @@ namespace Capi.Assessment.Invoice.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DueDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("IssuedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("IssuedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTimeOffset?>("PaidAt")
                         .HasColumnType("datetimeoffset");

@@ -12,13 +12,13 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Queries
 {
     #region Query
 
-    public class GetInvoicesQuery(IList<string> status, DateOnly today) : EFCoreCriteriaDomainQuery<Invoice>, IQuery<IEnumerable<Invoice>>
+    public class GetInvoicesQuery(IList<string> status, DateTime today) : EFCoreCriteriaDomainQuery<Invoice>, IQuery<IEnumerable<Invoice>>
     {
         #region Properties
 
         public IList<string> Status { get; } = status;
 
-        public DateOnly TodaysDate { get; } = today;
+        public DateTime TodaysDate { get; } = today;
 
         #endregion
 
