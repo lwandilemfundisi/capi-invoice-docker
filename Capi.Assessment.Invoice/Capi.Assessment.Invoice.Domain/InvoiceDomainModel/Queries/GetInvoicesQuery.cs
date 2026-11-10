@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualBasic;
-using XFrame.Aggregates.Queries;
-using XFrame.Common.Extensions;
+﻿using XFrame.Aggregates.Queries;
 using XFrame.Persistence;
 using XFrame.Persistence.EFCore.Extensions;
 using XFrame.Persistence.EFCore.Queries.CriteriaQueries;
 using XFrame.Persistence.EFCore.Queries.Filtering;
-using XFrame.Persistence.Extensions;
-using XFrame.Persistence.Queries.Filterings;
 
 namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Queries
 {
@@ -26,9 +22,9 @@ namespace Capi.Assessment.Invoice.Domain.InvoiceDomainModel.Queries
 
         protected override void OnBuildDomainCriteria(EFCoreDomainCriteria domainCriteria)
         {
-            domainCriteria.BuildCriteria(criteria => criteria
-            .When(Status.Any(), x => x.NotIn(nameof(Invoice.Status), Status))
-            .When(TodaysDate != default, x => x.LessThan(nameof(Invoice.DueDate), TodaysDate)));
+            domainCriteria.BuildCriteria<Invoice>(criteria => criteria
+            .When(Status.Any(), x => x.NotIn(i => i.Status, Status))
+            .When(TodaysDate != default, x => x.LessThan(i => i.DueDate, TodaysDate)));
         }
 
         #endregion

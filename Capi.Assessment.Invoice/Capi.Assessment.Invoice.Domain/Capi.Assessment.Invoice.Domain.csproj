@@ -15,7 +15,7 @@
 	<PackageReference Include="XFrame.Aggregates.Queries" Version="9.0.0" />
 	<PackageReference Include="XFrame.Aggregates.Queries.Extensions" Version="9.0.0" />
 	<PackageReference Include="XFrame.DomainContainers" Version="9.0.0" />
-	<PackageReference Include="XFrame.Persistence.EFCore" Version="9.0.10" />
+	<PackageReference Include="XFrame.Persistence.EFCore" Version="9.1.2" />
 	<PackageReference Include="XFrame.Persistence.EFCore.Extensions" Version="9.0.0" />
 	<PackageReference Include="XFrame.Rules" Version="9.0.1" />
 	<PackageReference Include="XFrame.Rules.Extensions" Version="9.0.0" />
